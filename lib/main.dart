@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './result.dart';
+import './quiz.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -17,6 +17,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final List<Map> questions = const [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Black', 'Red', 'Green', 'white'],
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Rabit', 'Snake', 'Elephant', 'Lion'],
+    },
+    {
+      'questionText': 'What\'s your favorite developer?',
+      'answers': ['Mircea', 'Mircea', 'Mircea', 'Mircea'],
+    },
+  ];
   int _questionIndex = 0;
 
   void _answerQuestion() {
@@ -24,42 +38,23 @@ class _MyAppState extends State<MyApp> {
       _questionIndex++;
     });
     print(_questionIndex);
+    if (_questionIndex < questions.length) {
+      print('more questions');
+    } else {
+      print('no more questions');
+    }
   }
 
   @override
   Widget build(BuildContext contex) {
-    List<Map> questions = [
-      {
-        'questionText': 'What\'s your favorite color?',
-        'answers': ['Black', 'Red', 'Green', 'white'],
-      },
-      {
-        'questionText': 'What\'s your favorite animal?',
-        'answers': ['Rabit', 'Snake', 'Elephant', 'Lion'],
-      },
-      {
-        'questionText': 'What\'s your favorite developer?',
-        'answers': ['Mircea', 'Mircea', 'Mircea', 'Mircea'],
-      },
-    ];
-
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('My first App'),
-        ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-          ],
-        ),
-      ),
+          appBar: AppBar(
+            title: Text('My first App'),
+          ),
+          body: _questionIndex < questions.length
+              ? Quiz(_answerQuestion, questions, _questionIndex)
+              : Result()),
     );
   }
 }
